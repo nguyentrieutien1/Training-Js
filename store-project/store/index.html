@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+      integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn"
+      crossorigin="anonymous"
+    />
+    <title>STORE</title>
+    <style>
+      .navbar {
+        background-color: rgba(0, 0, 0, 0.432);
+      }
+      .navbar a {
+        color: rgb(31, 29, 29);
+      }
+      .card {
+        margin-bottom: 50px;
+      }
+      .card img {
+        width: 200px;
+        height: 200px;
+        margin: 0 auto;
+        object-fit: contain;
+      }
+      .btn-primary {
+        width: max-content;
+        margin: 0 auto;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="nav justify-content-center">
+      <a class="nav-link" href="./../home/index.html">HOME</a>
+      <a class="nav-link" href="./index.html">STORE</a>
+      <a class="nav-link" href="./../cart/index.html">CART</a>
+      <a class="nav-link" href="#">ABOUT US</a>
+      <a class="nav-link" href="#">CONTACT</a>
+    </nav>
+    <div class="row"></div>
+  </body>
+  <script>
+    const rowElement = document.querySelector(".row");
+    const products = fetch(`https://fakestoreapi.com/products/`);
+    products
+      .then(function (result) {
+        return result.json();
+      })
+      .then(function (data) {
+        const resultMap = data.map(function (value, index, arr) {
+          return `<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 ">
+         <div class="card text-left">
+      <img class="card-img-top" src="${value.image}" alt="">
+      <div class="card-body">
+        <h4 class="card-title">${value.title}</h4>
+        <h3 class="card-price">$ ${value.price}</h3>
+        <p class="card-text">${value.description}</p>
+      </div>
+        <button onClick="handleClick(${JSON.stringify(value)
+          .split('"')
+          .join(
+            "&quot;"
+          )})" href="#" class="btn btn-primary">Buy Products</button>
+    </div>
+      </div>`;
+        });
+        rowElement.innerHTML = resultMap.join("");
+      });
+    function handleClick(product) {
+      console.log(product);
+    }
+  </script>
+</html>
