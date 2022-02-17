@@ -95,7 +95,7 @@
       btn.addEventListener("click", function () {
         let spanElement = this.nextElementSibling;
         let count = Number.parseInt(spanElement.textContent);
-        spanElement.textContent = --count;
+        spanElement.textContent = count--;
         if (count < 1) {
           spanElement.textContent = 1;
           count = 1;
