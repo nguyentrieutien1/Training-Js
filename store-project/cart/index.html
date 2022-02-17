@@ -12,24 +12,9 @@
     />
     <title>STORE</title>
     <style>
-      .navbar {
-        background-color: rgba(0, 0, 0, 0.432);
-      }
-      .navbar a {
-        color: rgb(31, 29, 29);
-      }
-      .card {
-        margin-bottom: 50px;
-      }
-      .card img {
-        width: 200px;
-        height: 200px;
-        margin: 0 auto;
-        object-fit: contain;
-      }
-      .btn-primary {
-        width: max-content;
-        margin: 0 auto;
+      .content img {
+        width: 150px;
+        height: 150px;
       }
     </style>
   </head>
@@ -42,5 +27,89 @@
       <a class="nav-link" href="#">CONTACT</a>
     </nav>
     <h1>THIS IS CART</h1>
+
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>PRODUCT</th>
+          <th>PRICE</th>
+          <th>DESCRIPTION</th>
+          <th>ACTION</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody class="content"></tbody>
+    </table>
   </body>
+  <script>
+    const content = document.querySelector(".content");
+    const products = JSON.parse(localStorage.getItem("products"));
+    function render() {
+      const mapProducts = products.map(function (value, index) {
+        return `<tr>
+          <td>${value.id}</td>
+          <td><img src="${value.image}" ></td>
+          <td class="price">${value.price}</td>
+          <td>${value.description.slice(0, 100)}</td>
+          <td>
+            <button type="button" class="btn btn-primary">-</button>
+            <span class="count">${value.count || 1}</span>
+            <button type="button" class="btn btn-warning">+</button>
+          </td>
+          <td class="total">
+            $ ${value.price.toFixed(2)}
+          </td>
+        </tr>`;
+      });
+      content.innerHTML = mapProducts.join("");
+    }
+    render();
+
+    // Increment product
+
+    const incrementBtns = document.querySelectorAll(".btn-warning");
+    const prices = document.querySelectorAll(".price");
+    const totals = document.querySelectorAll(".total");
+    // incrementBtns.addEventListener("click", function () {
+    //   let count = Number.parseInt(price.textContent);
+    //   price.textContent = ++count;
+    // });
+    incrementBtns.forEach(function (btn, index) {
+      btn.addEventListener("click", function () {
+        console.log(this);
+        let spanElement = this.previousElementSibling;
+        let count = Number.parseInt(spanElement.textContent);
+        spanElement.textContent = ++count;
+        totals[index].textContent = `$ ${(
+          prices[index].textContent * count
+        ).toFixed(2)}`;
+        products[index].count = count;
+        localStorage.setItem("products", JSON.stringify(products));
+      });
+    });
+
+    // Decrement
+    const deCrement = document.querySelectorAll(".btn-primary");
+    deCrement.forEach(function (btn, index) {
+      btn.addEventListener("click", function () {
+        let spanElement = this.nextElementSibling;
+        let count = Number.parseInt(spanElement.textContent);
+        spanElement.textContent = --count;
+        if (count < 1) {
+          spanElement.textContent = 1;
+          count = 1;
+          const isConfirm = confirm("Ban co chac chan xoa san pham khong ?");
+          if (isConfirm === true) {
+            products.splice(index, 1);
+            localStorage.setItem("products", JSON.stringify(products));
+            window.location.reload(true);
+          }
+        }
+        totals[index].textContent = `$ ${prices[index].textContent * count}`;
+        products[index].count = count;
+        localStorage.setItem("products", JSON.stringify(products));
+      });
+    });
+  </script>
 </html>

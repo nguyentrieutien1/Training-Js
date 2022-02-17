@@ -10,6 +10,8 @@
       integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn"
       crossorigin="anonymous"
     />
+
+    <!-- Latest compiled and minified CSS -->
     <title>STORE</title>
     <style>
       .navbar {
@@ -20,6 +22,7 @@
       }
       .card {
         margin-bottom: 50px;
+        padding: 10px 0;
       }
       .card img {
         width: 200px;
@@ -30,6 +33,9 @@
       .btn-primary {
         width: max-content;
         margin: 0 auto;
+      }
+      .card .btn {
+        float: right;
       }
     </style>
   </head>
@@ -70,9 +76,10 @@
         });
         rowElement.innerHTML = resultMap.join("");
       });
+    const productsArr = JSON.parse(localStorage.getItem("products")) || [];
     function handleClick(product) {
-      console.log(product);
-      console.log(123);
+      productsArr.push(product);
+      localStorage.setItem("products", JSON.stringify(productsArr));
     }
   </script>
 </html>
